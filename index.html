@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Саманчынын Жолу — Чыңгыз Айтматов</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --midnight: #0a0b14;
+    --deep-night: #111225;
+    --ink: #1a1c2e;
+    --stardust: #c8b8e8;
+    --moonlight: #e8dff5;
+    --gold: #d4a853;
+    --amber: #c4873a;
+    --earth: #6b4c2a;
+    --grass: #3a5c3a;
+    --wheat: #c9a96e;
+    --crimson: #8b2020;
+    --rose: #c45c5c;
+    --mist: rgba(200, 184, 232, 0.08);
+    --glow: rgba(212, 168, 83, 0.15);
+  }
+ 
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+  html { scroll-behavior: smooth; }
+ 
+  body {
+    background: var(--midnight);
+    color: var(--moonlight);
+    font-family: 'Noto Serif', serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+ 
+  /* STARS BACKGROUND */
+  .stars-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+ 
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--dur, 3s) ease-in-out infinite alternate;
+    animation-delay: var(--delay, 0s);
+  }
+ 
+  @keyframes twinkle {
+    from { opacity: var(--min-op, 0.1); transform: scale(1); }
+    to   { opacity: var(--max-op, 0.8); transform: scale(1.3); }
+  }
+ 
+  /* MILKY WAY BAND */
+  .milky-way {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 120% 30% at 60% 40%, rgba(150, 120, 200, 0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 80% 20% at 30% 60%, rgba(100, 80, 160, 0.05) 0%, transparent 60%);
+  }
+ 
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    overflow: hidden;
+  }
+ 
+  .hero::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 300px;
+    background: linear-gradient(to top,
+      rgba(20, 35, 20, 0.6) 0%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+ 
+  /* Mountain silhouette */
+  .mountains {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 220px;
+    z-index: 0;
+  }
+ 
+  .mountain-svg { width: 100%; height: 100%; }
+ 
+  .hero-content { position: relative; z-index: 2; }
+ 
+  .kyr-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.3s;
+  }
+ 
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 9vw, 7rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--moonlight);
+    text-shadow:
+      0 0 80px rgba(212, 168, 83, 0.3),
+      0 0 160px rgba(150, 100, 200, 0.15);
+    opacity: 0;
+    animation: fadeUp 1.2s ease forwards 0.6s;
+    margin-bottom: 16px;
+  }
+ 
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+ 
+  .hero-author {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-style: italic;
+    color: var(--stardust);
+    letter-spacing: 0.1em;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.9s;
+    margin-bottom: 40px;
+  }
+ 
+  .hero-quote {
+    max-width: 560px;
+    margin: 0 auto 48px;
+    font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+    line-height: 1.8;
+    color: rgba(232, 223, 245, 0.7);
+    font-style: italic;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1.2s;
+  }
+ 
+  .scroll-hint {
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1.5s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+ 
+  .scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+ 
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 1; }
+    50% { transform: scaleY(0.6); opacity: 0.4; }
+  }
+ 
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+ 
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10, 11, 20, 0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(212, 168, 83, 0.15);
+    padding: 0 clamp(20px, 5vw, 80px);
+  }
+ 
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    gap: 20px;
+  }
+ 
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+ 
+  .nav-links {
+    display: flex;
+    gap: clamp(16px, 3vw, 36px);
+    list-style: none;
+    flex-wrap: wrap;
+  }
+ 
+  .nav-links a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--stardust);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+ 
+  .nav-links a:hover { color: var(--gold); }
+ 
+  /* SECTIONS */
+  section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(60px, 10vw, 120px) clamp(20px, 5vw, 60px);
+  }
+ 
+  .section-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+ 
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.4;
+  }
+ 
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.15;
+    margin-bottom: clamp(24px, 4vw, 48px);
+    color: var(--moonlight);
+  }
+ 
+  .section-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+ 
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(30px, 5vw, 80px);
+    align-items: center;
+  }
+ 
+  @media (max-width: 700px) {
+    .about-grid { grid-template-columns: 1fr; }
+  }
+ 
+  .about-text p {
+    font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+    line-height: 1.9;
+    color: rgba(232, 223, 245, 0.8);
+    margin-bottom: 20px;
+  }
+ 
+  .about-text p:last-child { margin-bottom: 0; }
+ 
+  .book-visual {
+    display: flex;
+    justify-content: center;
+  }
+ 
+  .book-card {
+    width: clamp(180px, 30vw, 280px);
+    aspect-ratio: 2/3;
+    background: linear-gradient(135deg, var(--ink) 0%, var(--deep-night) 100%);
+    border: 1px solid rgba(212, 168, 83, 0.3);
+    border-radius: 4px 12px 12px 4px;
+    box-shadow:
+      -8px 8px 0 rgba(0,0,0,0.6),
+      -16px 16px 0 rgba(0,0,0,0.3),
+      0 0 60px rgba(212, 168, 83, 0.1),
+      inset 4px 0 8px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    text-align: center;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+ 
+  .book-card:hover {
+    transform: translateY(-8px) rotate(1deg);
+    box-shadow:
+      -12px 14px 0 rgba(0,0,0,0.6),
+      -20px 22px 0 rgba(0,0,0,0.3),
+      0 0 80px rgba(212, 168, 83, 0.2);
+  }
+ 
+  .book-card::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 0;
+    width: 6px;
+    background: linear-gradient(to bottom, var(--gold), var(--amber), var(--earth));
+  }
+ 
+  .book-card-stars {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    letter-spacing: 4px;
+  }
+ 
+  .book-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+ 
+  .book-card-author {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--stardust);
+  }
+ 
+  .book-card-year {
+    position: absolute;
+    bottom: 16px;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: rgba(212, 168, 83, 0.5);
+  }
+ 
+  /* DIVIDER */
+  .divider {
+    position: relative;
+    z-index: 1;
+    max-width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(212, 168, 83, 0.2), transparent);
+  }
+ 
+  /* CHARACTERS */
+  .characters-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(24px, 4vw, 60px);
+  }
+ 
+  @media (max-width: 600px) {
+    .characters-grid { grid-template-columns: 1fr; }
+  }
+ 
+  .char-card {
+    background: linear-gradient(135deg, var(--mist), rgba(26, 28, 46, 0.6));
+    border: 1px solid rgba(212, 168, 83, 0.12);
+    border-radius: 2px;
+    padding: clamp(24px, 4vw, 48px);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.4s, transform 0.4s;
+  }
+ 
+  .char-card:hover {
+    border-color: rgba(212, 168, 83, 0.35);
+    transform: translateY(-4px);
+  }
+ 
+  .char-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+ 
+  .char-card.tolgonaı::before {
+    background: linear-gradient(to right, var(--gold), var(--wheat));
+  }
+ 
+  .char-card.aliman::before {
+    background: linear-gradient(to right, var(--rose), var(--crimson));
+  }
+ 
+  .char-icon {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    display: block;
+  }
+ 
+  .char-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    margin-bottom: 6px;
+    color: var(--moonlight);
+  }
+ 
+  .char-name-ky {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+    display: block;
+  }
+ 
+  .char-desc {
+    font-size: clamp(0.9rem, 1.6vw, 1rem);
+    line-height: 1.85;
+    color: rgba(232, 223, 245, 0.75);
+  }
+ 
+  .char-traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+  }
+ 
+  .trait {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border: 1px solid rgba(212, 168, 83, 0.25);
+    color: var(--stardust);
+    border-radius: 2px;
+  }
+ 
+  /* PLOT */
+  .plot-timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+ 
+  .plot-timeline::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 0;
+    width: 1px;
+    background: linear-gradient(to bottom,
+      transparent,
+      rgba(212, 168, 83, 0.4) 10%,
+      rgba(212, 168, 83, 0.4) 90%,
+      transparent
+    );
+  }
+ 
+  .plot-item {
+    position: relative;
+    margin-bottom: clamp(32px, 5vw, 56px);
+    opacity: 0;
+    transform: translateX(20px);
+    animation: slideIn 0.6s ease forwards;
+  }
+ 
+  .plot-item:nth-child(1) { animation-delay: 0.1s; }
+  .plot-item:nth-child(2) { animation-delay: 0.2s; }
+  .plot-item:nth-child(3) { animation-delay: 0.3s; }
+  .plot-item:nth-child(4) { animation-delay: 0.4s; }
+  .plot-item:nth-child(5) { animation-delay: 0.5s; }
+ 
+  @keyframes slideIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+ 
+  .plot-dot {
+    position: absolute;
+    left: -47px;
+    top: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 12px rgba(212, 168, 83, 0.6);
+    border: 2px solid var(--midnight);
+  }
+ 
+  .plot-chapter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+ 
+  .plot-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: var(--moonlight);
+    margin-bottom: 12px;
+  }
+ 
+  .plot-text {
+    font-size: clamp(0.9rem, 1.6vw, 1rem);
+    line-height: 1.85;
+    color: rgba(232, 223, 245, 0.7);
+  }
+ 
+  /* THEMES */
+  .themes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+  }
+ 
+  .theme-card {
+    background: var(--mist);
+    border: 1px solid rgba(212, 168, 83, 0.1);
+    padding: clamp(20px, 3vw, 36px);
+    border-radius: 2px;
+    text-align: center;
+    transition: background 0.4s, border-color 0.4s, transform 0.4s;
+  }
+ 
+  .theme-card:hover {
+    background: var(--glow);
+    border-color: rgba(212, 168, 83, 0.3);
+    transform: translateY(-6px);
+  }
+ 
+  .theme-icon {
+    font-size: 2rem;
+    margin-bottom: 14px;
+    display: block;
+  }
+ 
+  .theme-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+ 
+  .theme-desc {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: rgba(232, 223, 245, 0.65);
+  }
+ 
+  /* QUOTE SECTION */
+  .quote-section {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: clamp(60px, 10vw, 120px) clamp(20px, 8vw, 160px);
+    background: linear-gradient(135deg,
+      rgba(20, 15, 35, 0.8),
+      rgba(10, 11, 20, 0.9)
+    );
+    border-top: 1px solid rgba(212, 168, 83, 0.1);
+    border-bottom: 1px solid rgba(212, 168, 83, 0.1);
+  }
+ 
+  .big-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem, 3.5vw, 2.4rem);
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--moonlight);
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto 24px;
+  }
+ 
+  .big-quote::before {
+    content: '❝';
+    position: absolute;
+    top: -30px;
+    left: -20px;
+    font-size: clamp(3rem, 8vw, 5rem);
+    color: rgba(212, 168, 83, 0.15);
+    font-family: serif;
+    line-height: 1;
+  }
+ 
+  .quote-attrib {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+  }
+ 
+  /* AUTHOR */
+  .author-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: clamp(30px, 5vw, 60px);
+    align-items: start;
+  }
+ 
+  @media (max-width: 650px) {
+    .author-grid { grid-template-columns: 1fr; }
+  }
+ 
+  .author-badge {
+    width: clamp(120px, 20vw, 200px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ink), var(--deep-night));
+    border: 2px solid rgba(212, 168, 83, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    box-shadow:
+      0 0 40px rgba(212, 168, 83, 0.08),
+      inset 0 0 30px rgba(150, 100, 200, 0.05);
+  }
+ 
+  .author-initial {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    color: var(--gold);
+    line-height: 1;
+  }
+ 
+  .author-years {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--stardust);
+    margin-top: 6px;
+  }
+ 
+  .author-info p {
+    font-size: clamp(0.9rem, 1.7vw, 1.05rem);
+    line-height: 1.9;
+    color: rgba(232, 223, 245, 0.78);
+    margin-bottom: 18px;
+  }
+ 
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    background: var(--deep-night);
+    border-top: 1px solid rgba(212, 168, 83, 0.1);
+    text-align: center;
+    padding: clamp(30px, 5vw, 60px) 20px;
+  }
+ 
+  .footer-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+ 
+  .footer-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--stardust);
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+  }
+ 
+  /* FULL-WIDTH BG for certain sections */
+  .bg-full {
+    position: relative;
+    background: linear-gradient(180deg, var(--midnight) 0%, #0d1018 100%);
+  }
+ 
+  /* SCROLL ANIMATIONS */
+  .fade-in-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+ 
+<!-- Stars -->
+<div class="stars-bg" id="starsContainer"></div>
+<div class="milky-way"></div>
+ 
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">✦ Айтматов</div>
+    <ul class="nav-links">
+      <li><a href="#about">Чыгарма</a></li>
+      <li><a href="#characters">Каармандар</a></li>
+      <li><a href="#plot">Сюжет</a></li>
+      <li><a href="#themes">Темалар</a></li>
+      <li><a href="#author">Автор</a></li>
+    </ul>
+  </div>
+</nav>
+ 
+<!-- HERO -->
+<div class="hero">
+  <div class="mountains">
+    <svg class="mountain-svg" viewBox="0 0 1440 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="mtnGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a2a1a" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#0f1a0f" stop-opacity="1"/>
+        </linearGradient>
+      </defs>
+      <!-- Far mountains -->
+      <polygon points="0,220 0,160 100,100 200,130 300,80 400,110 500,60 600,90 700,50 800,80 900,40 1000,70 1100,30 1200,65 1300,20 1400,55 1440,40 1440,220" fill="rgba(20,30,20,0.6)"/>
+      <!-- Near hills -->
+      <polygon points="0,220 0,200 80,170 160,180 240,155 380,175 480,145 600,165 720,140 860,160 960,135 1100,155 1200,140 1320,158 1440,145 1440,220" fill="rgba(15,25,15,0.85)"/>
+      <!-- Ground -->
+      <rect x="0" y="200" width="1440" height="20" fill="rgba(10,18,10,1)"/>
+      <!-- Stars near peaks -->
+      <circle cx="500" cy="55" r="1.5" fill="white" opacity="0.7"/>
+      <circle cx="700" cy="45" r="1" fill="white" opacity="0.6"/>
+      <circle cx="900" cy="35" r="2" fill="white" opacity="0.8"/>
+      <circle cx="1100" cy="25" r="1.5" fill="white" opacity="0.7"/>
+      <circle cx="300" cy="75" r="1" fill="white" opacity="0.5"/>
+    </svg>
+  </div>
+ 
+  <div class="hero-content">
+    <div class="kyr-subtitle">Чыңгыз Айтматов · 1963</div>
+    <h1 class="hero-title"><em>Саманчынын</em><br>Жолу</h1>
+    <p class="hero-author">Ак кеме болгон кыялдар, кара жерде калган изтер</p>
+    <p class="hero-quote">
+      Саманчынын жолу — асманды кесип өткөн жылдыздардын дарыясы,
+      жана эки аялдын жүрөгүнөн өткөн жазмыш...
+    </p>
+    <div class="scroll-hint">
+      <span>ылдый жылдыр</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ABOUT -->
+<section id="about" class="fade-in-up">
+  <div class="section-label">Чыгарма жөнүндө</div>
+  <div class="about-grid">
+    <div class="about-text">
+      <h2 class="section-title">Кыргыз <em>адабиятынын</em> жылдызы</h2>
+      <p>
+        «Саманчынын Жолу» — Чыңгыз Айтматовдун 1963-жылы жазылган атактуу повести.
+        Чыгарма орус тилинде «Материнское поле» деген ат менен да белгилүү.
+        Бул — аналык сүйүү, согуш трагедиясы жана жерге болгон терең байланыш жөнүндөгү баян.
+      </p>
+      <p>
+        Повесть диалог формасында жазылган: кары Толгонай жерге, талаага, Саманчынын Жолуна
+        (Сүт жолуна) кайрылып, өзүнүн оор жашоосун айтып берет. Автор кыргыз
+        аялынын күчүн, чыдамкайлыгын жана мээримин ачык сүрөттөйт.
+      </p>
+      <p>
+        Чыгарма Советтер Союзунда чоң резонанс жаратып, бир нече тилге которулган.
+        Айтматовдун дүйнөлүк адабиятка кирген биринчи чоң чыгармаларынын бири болуп саналат.
+      </p>
+    </div>
+    <div class="book-visual">
+      <div class="book-card">
+        <div class="book-card-stars">✦ ✦ ✦</div>
+        <div class="book-card-title">Саманчынын Жолу</div>
+        <div class="book-card-author">Чыңгыз Айтматов</div>
+        <div class="book-card-year">1963</div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<div class="divider"></div>
+ 
+<!-- CHARACTERS -->
+<section id="characters" class="fade-in-up">
+  <div class="section-label">Башкы каармандар</div>
+  <h2 class="section-title">Жүрөктөрдүн <em>ээлери</em></h2>
+  <div class="characters-grid">
+ 
+    <div class="char-card tolgonaı">
+      <span class="char-icon">🌾</span>
+      <h3 class="char-name">Толгонай</h3>
+      <span class="char-name-ky">Эне · Жер · Тагдыр</span>
+      <p class="char-desc">
+        Толгонай — чыгарманын башкы каарманы жана баяндоочу. Ал кары аял болуп,
+        өткөн жашоосун жерге айтып берет. Согуш аны эрин, үч уулун жана
+        келинин алып кеткен. Ошентсе да Толгонай сынган жок — жер менен
+        байланышын, ишенимин жоготкон жок.
+      </p>
+      <p class="char-desc" style="margin-top:14px;">
+        Ал — кыргыз аялынын символу: чыдамкай, мээримдүү, бирок ичтен
+        күйүп-бышкан. Анын монологдору терең философиялык мааниге ээ.
+      </p>
+      <div class="char-traits">
+        <span class="trait">Чыдамкайлык</span>
+        <span class="trait">Аналык сүйүү</span>
+        <span class="trait">Даанышмандык</span>
+        <span class="trait">Ишеним</span>
+      </div>
+    </div>
+ 
+    <div class="char-card aliman">
+      <span class="char-icon">🌹</span>
+      <h3 class="char-name">Алиман</h3>
+      <span class="char-name-ky">Келин · Жаш кыял · Согуштун курмандыгы</span>
+      <p class="char-desc">
+        Алиман — Толгонайдын кенже уулу Масельбектин жубайы. Жаш, сулуу
+        жана жашоого толгон аял. Ал согуш башталгандан кийин да жалгыз
+        калып, оор тагдыр менен беттешет.
+      </p>
+      <p class="char-desc" style="margin-top:14px;">
+        Алиманды айыл кишилери кабыл алгысы келбейт, бирок Толгонай аны
+        колдойт, аяйт. Алиманнын образы — аялдын ичтеги күрөшүн жана
+        жалгыздыктагы эрдигин чагылдырат.
+      </p>
+      <div class="char-traits">
+        <span class="trait">Сулуулук</span>
+        <span class="trait">Эрдик</span>
+        <span class="trait">Жалгыздык</span>
+        <span class="trait">Умтулуу</span>
+      </div>
+    </div>
+ 
+  </div>
+</section>
+ 
+<!-- QUOTE BREAK -->
+<div class="quote-section">
+  <blockquote class="big-quote">
+    Жер — биздин энебиз. Ага кайгыбызды да,
+    кубанычыбызды да айтабыз. Ал унутпайт,
+    ал кечирет, ал сакта́йт.
+  </blockquote>
+  <p class="quote-attrib">— Чыңгыз Айтматов, Саманчынын Жолу</p>
+</div>
+ 
+<!-- PLOT -->
+<section id="plot" class="fade-in-up">
+  <div class="section-label">Сюжет</div>
+  <h2 class="section-title">Жазмыштын <em>жолдору</em></h2>
+  <div class="plot-timeline">
+ 
+    <div class="plot-item">
+      <div class="plot-dot"></div>
+      <div class="plot-chapter">Башталыш</div>
+      <h3 class="plot-heading">Талаа менен жолугушуу</h3>
+      <p class="plot-text">
+        Чыгарма кары Толгонайдын жерге кайрылышы менен башталат. Ал талааны
+        «эне» деп атап, бүтүн өмүрүн ага мүнөжөт кылып айтып берет.
+        Саманчынын Жолу — жылдыздардын дарыясы — анын бала чагынан бери
+        умут жана кыял символу болуп келген.
+      </p>
+    </div>
+ 
+    <div class="plot-item">
+      <div class="plot-dot"></div>
+      <div class="plot-chapter">Жаштык</div>
+      <h3 class="plot-heading">Сүйүү жана тынч жашоо</h3>
+      <p class="plot-text">
+        Толгонай жаш кезинде Суванкул менен үйлөнүп, бактылуу жашайт.
+        Үч уул төрөйт: Касым, Маселбек, Жайнак. Колхоздо иштешет, жерди
+        айдашат. Согушка чейинки жылдар — алардын бакыт мезгили.
+      </p>
+    </div>
+ 
+    <div class="plot-item">
+      <div class="plot-dot"></div>
+      <div class="plot-chapter">Кайгы</div>
+      <h3 class="plot-heading">Согуш баардыгын алып кетет</h3>
+      <p class="plot-text">
+        Улуу Ата Мекендик согуш башталат. Эр Суванкул жана уулдары майданга
+        кетет. Толгонай менен келин Алиман айылда калышат. Бирин-бири
+        кийин каза кабарлары келе баштайт. Алар жалгыз жер айдап, тамак-аш
+        өстүрүп, фронтту азыктандырышат.
+      </p>
+    </div>
+ 
+    <div class="plot-item">
+      <div class="plot-dot"></div>
+      <div class="plot-chapter">Алиман</div>
+      <h3 class="plot-heading">Ичтеги күрөш</h3>
+      <p class="plot-text">
+        Маселбек каза болгонунан кийин Алиман жесир калат. Айылдан кысым
+        көрөт, бирок Толгонай аны коргойт. Алиман бара-бара кетип калат.
+        Бул окуя эне менен келиндин терең байланышын, бирок жашоонун
+        катаалдыгын ачып берет.
+      </p>
+    </div>
+ 
+    <div class="plot-item">
+      <div class="plot-dot"></div>
+      <div class="plot-chapter">Жыйынтык</div>
+      <h3 class="plot-heading">Жер менен кош айтышуу</h3>
+      <p class="plot-text">
+        Толгонай жалгыз калат. Ал жаашканда, иштегенде, эс алганда — дайыма
+        жер менен сүйлөшөт. Чыгарма анын жерге акыркы монологу менен аяктайт:
+        бардык кайгы, бардык сүйүү, бардык умут — жерге сиңип калган.
+      </p>
+    </div>
+ 
+  </div>
+</section>
+ 
+<div class="divider"></div>
+ 
+<!-- THEMES -->
+<section id="themes" class="fade-in-up">
+  <div class="section-label">Негизги темалар</div>
+  <h2 class="section-title">Чыгарманын <em>руху</em></h2>
+  <div class="themes-grid">
+ 
+    <div class="theme-card">
+      <span class="theme-icon">🌿</span>
+      <h3 class="theme-name">Жер жана Эне</h3>
+      <p class="theme-desc">
+        Жер — тирүүлүктүн башаты. Толгонай жерди эне катары кабылдайт.
+        Бул байланыш кыргыз маданиятынын тереңинен келет.
+      </p>
+    </div>
+ 
+    <div class="theme-card">
+      <span class="theme-icon">⚔️</span>
+      <h3 class="theme-name">Согуштун трагедиясы</h3>
+      <p class="theme-desc">
+        Согуш үй-бүлөнү, бакытты, болочокту жок кылат.
+        Айтматов согушту каармандын сыртынан эмес, ичинен кöрсөтöт.
+      </p>
+    </div>
+ 
+    <div class="theme-card">
+      <span class="theme-icon">💞</span>
+      <h3 class="theme-name">Аналык сүйүү</h3>
+      <p class="theme-desc">
+        Толгонайдын уулдарга болгон сүйүүсү — чексиз.
+        Ал жоготса да, аналык жүрөгү сынбайт, бекем турат.
+      </p>
+    </div>
+ 
+    <div class="theme-card">
+      <span class="theme-icon">⭐</span>
+      <h3 class="theme-name">Умут жана жылдыздар</h3>
+      <p class="theme-desc">
+        Саманчынын Жолу — үмүттүн символу. Аялдар асманга карап
+        жоголгон жакындарды издешет, кыял менен жашашат.
+      </p>
+    </div>
+ 
+    <div class="theme-card">
+      <span class="theme-icon">🕊️</span>
+      <h3 class="theme-name">Аялдын эрдиги</h3>
+      <p class="theme-desc">
+        Толгонай жана Алиман — согуш мезгилинде эр жүрөк, чыдамкай,
+        Кыргыз аялынын образын дүйнөгө тааныткан каармандар.
+      </p>
+    </div>
+ 
+    <div class="theme-card">
+      <span class="theme-icon">🌾</span>
+      <h3 class="theme-name">Эмгек жана күнүмдүк турмуш</h3>
+      <p class="theme-desc">
+        Жер айдоо, эгин чабуу — жөн гана иш эмес, жашоонун мааниси.
+        Эмгек аркылуу алар жашашат жана умутун сакташат.
+      </p>
+    </div>
+ 
+  </div>
+</section>
+ 
+<!-- AUTHOR -->
+<section id="author" class="fade-in-up">
+  <div class="section-label">Автор жөнүндө</div>
+  <h2 class="section-title">Чыңгыз <em>Айтматов</em></h2>
+  <div class="author-grid">
+    <div class="author-badge">
+      <div class="author-initial">Ч</div>
+      <div class="author-years">1928 — 2008</div>
+    </div>
+    <div class="author-info">
+      <p>
+        Чыңгыз Торекулович Айтматов — Кыргызстандын улуу жазуучусу, советтик
+        жана кыргыз адабиятынын классиги. Ал 1928-жылы 12-декабрда Шекер айылында
+        туулган. Кыргыз тилинде да, орус тилинде да чыгарма жаратып, экөөнү тең
+        дүйнөлүк деңгээлге чыгарды.
+      </p>
+      <p>
+        Ленин сыйлыгынын (1963), Мамлекеттик сыйлыктын бир нече жолку laureate,
+        Советтер Союзунун Социалисттик Эмгек Баатыры. Анын «Жамийла», «Ак кеме»,
+        «Саманчынын Жолу», «Ата-Журт», «Кыямат» сыяктуу чыгармалары 170 тилге
+        которулган.
+      </p>
+      <p>
+        Айтматов өзүнүн чыгармаларында ар дайым адамдын табиятка, жерге, энеге
+        болгон байланышын, согуштун кеселдерин жана рухий дүйнөнү терең
+        сүрөттөгөн. Ал 2008-жылы 10-июнда Нюрнберг шаарында каза болгон.
+      </p>
+    </div>
+  </div>
+</section>
+ 
+<!-- FOOTER -->
+<footer>
+  <div class="footer-title">✦ Саманчынын Жолу ✦</div>
+  <p class="footer-sub">Чыңгыз Айтматов · 1963 · Кыргыз адабиятынын алтын мурасы</p>
+</footer>
+ 
+<script>
+  // Generate stars
+  const container = document.getElementById('starsContainer');
+  const starCount = 180;
+  for (let i = 0; i < starCount; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    const x = Math.random() * 100;
+    const y = Math.random() * 100;
+    const dur = (Math.random() * 4 + 2).toFixed(1);
+    const delay = (Math.random() * 5).toFixed(1);
+    const minOp = (Math.random() * 0.2).toFixed(2);
+    const maxOp = (Math.random() * 0.6 + 0.3).toFixed(2);
+    star.style.cssText = `
+      width: ${size}px;
+      height: ${size}px;
+      left: ${x}%;
+      top: ${y}%;
+      --dur: ${dur}s;
+      --delay: ${delay}s;
+      --min-op: ${minOp};
+      --max-op: ${maxOp};
+    `;
+    container.appendChild(star);
+  }
+ 
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+ 
+  document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
